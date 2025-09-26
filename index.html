@@ -2,127 +2,90 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>통합 NSI System</title>
+  <title>Windows Login</title>
   <style>
     body {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .page { display: none; height: 100vh; }
-    .active { display: flex; justify-content: center; align-items: center; flex-direction: column; }
-
-    /* 1️⃣ 로그인 화면 */
-    #login1 {
-      background: url("images/bg.jpg") no-repeat center center/cover;
+      background: url("images/bg.jpg") no-repeat center center/cover; /* 배경 이미지 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Segoe UI", sans-serif;
       color: white;
     }
-    .user-icon {
-      width: 100px; height: 100px; border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      display: flex; justify-content: center; align-items: center;
-      font-size: 60px; margin-bottom: 10px;
-    }
 
-    /* 2️⃣ 바탕화면 */
-    #desktop {
-      background: url("images/desktop.jpg") no-repeat center center/cover;
-      position: relative;
-    }
-    .icon {
-      position: absolute; top: 50px; left: 50px;
-      text-align: center; cursor: pointer; color: white; width: 80px;
-    }
-    .icon img { width: 60px; height: 60px; }
-    .icon span { display: block; margin-top: 5px; font-size: 14px; text-shadow: 0 0 3px black; }
-
-    /* 3️⃣ NSI 보안 로그인 */
-    #nsi {
-      background: black;
-      color: cyan;
-      font-family: 'Courier New', monospace;
+    .login-box {
       text-align: center;
     }
-    #nsi input {
-      padding: 10px; margin: 10px; border: 2px solid cyan;
-      background: black; color: cyan; font-size: 1em; text-align: center; width: 250px;
+
+    .user-icon img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 10px;
     }
-    #nsi button {
-      padding: 10px 20px; border: 2px solid cyan; background: black; color: cyan;
-      font-size: 1em; cursor: pointer; margin-top: 10px;
+
+    .username {
+      font-size: 28px;
+      margin: 10px 0 20px;
     }
-    #nsi button:hover { background: cyan; color: black; }
-    .error { color: red; display: none; margin-top: 10px; }
+
+    input[type="password"] {
+      width: 280px;
+      padding: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 4px;
+      outline: none;
+      text-align: center;
+    }
+
+    button {
+      display: none; /* Enter 치면 바로 동작하게 */
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ffbaba;
+      display: none;
+    }
   </style>
 </head>
 <body>
-
-  <!-- 1️⃣ 윈도우 로그인 화면 -->
-  <div id="login1" class="page active">
-    <div class="user-icon">👤</div>
-    <h2>User</h2>
-    <input type="password" id="pw" placeholder="암호 입력">
-    <button onclick="login1()">로그인</button>
-  </div>
-
-  <!-- 2️⃣ 바탕화면 -->
-  <div id="desktop" class="page">
-    <div class="icon" onclick="openApp()">
-      <img src="images/appicon.png" alt="앱 아이콘">
-      <span>NSI Login</span>
+  <div class="login-box">
+    <div class="user-icon">
+      <!-- 아이콘 이미지를 직접 넣으시면 됩니다 -->
+      <img src="images/user.png" alt="User Icon">
     </div>
-  </div>
-
-  <!-- 3️⃣ NSI 보안 로그인 -->
-  <div id="nsi" class="page">
-    <h1>■ NSI Security System ■</h1>
-    <p>아이디와 비밀번호를 입력하세요.</p>
-    <input type="text" id="username" placeholder="아이디">
-    <input type="password" id="password" placeholder="비밀번호">
-    <button onclick="nsiLogin()">접속</button>
-    <p id="error" class="error">경고: 아이디 또는 비밀번호 불일치</p>
+    <div class="username">DORI</div>
+    <input type="password" id="password" placeholder="암호">
+    <div id="hint" class="hint">힌트: 생년월일</div>
   </div>
 
   <script>
-    // 페이지 전환 함수
-    function showPage(id) {
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    }
+    const passwordInput = document.getElementById("password");
+    const hint = document.getElementById("hint");
 
-    // 1️⃣ 로그인 화면 → 데스크탑
-    function login1() {
-      const pw = document.getElementById("pw").value;
-      if (pw === "1234") {
-        showPage("desktop");
+    // 암호 확인
+    function checkPassword() {
+      const pw = passwordInput.value.trim();
+      if (pw === "19900101") { // 정답 비밀번호
+        window.location.href = "desktop.html"; // 바탕화면 페이지로 이동
       } else {
-        alert("암호가 올바르지 않습니다.");
+        hint.style.display = "block"; // 힌트 보이기
+        passwordInput.value = "";
       }
     }
 
-    // 2️⃣ 데스크탑 → NSI 로그인
-    function openApp() {
-      showPage("nsi");
-    }
-
-    // 3️⃣ NSI 로그인
-    function nsiLogin() {
-      const username = document.getElementById("username").value.trim().toLowerCase();
-      const password = document.getElementById("password").value.trim();
-      const error = document.getElementById("error");
-
-      const accounts = {
-        "god2dog@korea.kr": "25690",
-        "4bigs@korea.kr": "2410080142"
-      };
-
-      if (accounts[username] && accounts[username] === password) {
-        error.style.display = "none";
-        alert("접속 성공!");
-      } else {
-        error.style.display = "block";
+    // Enter 키 입력 시 로그인 시도
+    passwordInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        checkPassword();
       }
-    }
+    });
   </script>
 </body>
 </html>
