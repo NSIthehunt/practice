@@ -12,7 +12,24 @@
       overflow: hidden;
       background-color: black;
     }
-
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Login1 - Windows Style</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: url("images/login-bg.jpg") no-repeat center center/cover;
+      font-family: 'Segoe UI', sans-serif;
+      color: white; /* ✅ 전체 글자 흰색 */
+    }
     /* 전체화면 배경 이미지 + 블러 */
     .background img {
       position: fixed;
@@ -24,102 +41,75 @@
       filter: blur(12px);
       z-index: -1;
     }
+    .user-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
 
-    /* 로그인 컨테이너 */
-    .login-container {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
+    .username {
+      font-size: 1.5em;
+      margin-bottom: 20px;
       color: white;
     }
 
-    .login-container h1 {
-      font-size: 2.8em;
-      margin-bottom: 40px;
-      text-shadow: 0 0 5px rgba(0,0,0,0.7);
-    }
-
-    /* 입력창 스타일 */
-    .login-container input {
-      width: 300px;
-      padding: 14px;
-      margin: 12px 0;
+    input {
+      padding: 10px;
       border: none;
-      border-radius: 10px;
-      font-size: 1.1em;
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
       outline: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      backdrop-filter: blur(4px);
+      font-size: 1em;
+      width: 250px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      color: white; /* ✅ 입력 글자 흰색 */
     }
 
-    .login-container input::placeholder {
-      color: rgba(255,255,255,0.7);
+    input::placeholder {
+      color: white; /* ✅ placeholder 흰색 */
+      opacity: 0.7;
     }
 
-    /* 버튼 스타일 */
-    .login-container button {
-      width: 320px;
-      padding: 14px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(to bottom, #00e0ff, #00bcd4);
-      color: black;
-      font-size: 1.1em;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-      transition: 0.2s;
+    .error {
+      color: red;
+      margin-top: 10px;
+      display: none;
     }
 
-    .login-container button:hover {
-      background: linear-gradient(to bottom, #00bcd4, #00a0b0);
-    }
-
-    /* 힌트 메시지 */
     .hint {
-      margin-top: 15px;
-      font-size: 0.95em;
-      height: 1.2em;
-      text-shadow: 0 0 3px rgba(0,0,0,0.7);
+      color: yellow;
+      margin-top: 5px;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <!-- 배경 이미지 -->
-  <div class="background">
-    <img src="login-bg.jpg" alt="배경 이미지">
-  </div>
+  <img src="images/user-icon.png" alt="User Icon" class="user-icon">
+  <div class="username">DORI</div>
 
-  <!-- 로그인 폼 -->
-  <div class="login-container">
-    <h1>Windows 11 Login</h1>
-    <input type="text" id="username" placeholder="사용자 이름">
-    <input type="password" id="password" placeholder="암호">
-    <button onclick="checkPassword()">로그인</button>
-    <div class="hint" id="hint"></div>
-  </div>
+  <input type="password" id="password" placeholder="암호 입력">
+  <p id="error" class="error">암호가 올바르지 않습니다.</p>
+  <p id="hint" class="hint">힌트: 생년월일</p>
 
   <script>
-    function checkPassword() {
-      const passwordInput = document.getElementById('password').value;
-      const hintDiv = document.getElementById('hint');
+    const passwordInput = document.getElementById("password");
+    const error = document.getElementById("error");
+    const hint = document.getElementById("hint");
 
-      if(passwordInput === '950906') {
-        hintDiv.style.color = 'lime';
-        hintDiv.textContent = '로그인 성공!';
-      } else {
-        hintDiv.style.color = 'yellow';
-        hintDiv.textContent = '힌트: 생년월일';
+    passwordInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        const password = passwordInput.value.trim();
+        if (password === "950906") {   // ✅ 암호 변경
+          window.location.href = "desktop.html"; // 성공시 desktop.html로 이동
+        } else {
+          error.style.display = "block";
+          hint.style.display = "block";
+        }
       }
-    }
+    });
   </script>
 </body>
 </html>
+
+
+   
