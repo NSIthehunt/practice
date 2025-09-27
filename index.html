@@ -128,28 +128,22 @@
     });
     
   </script>
-        <!-- 부팅음 추가 -->
-    <audio id="bootSound" src="boot.mp3" preload="auto"></audio>
+        <audio id="bootSound" src="boot.mp3" preload="auto"></audio>
 
-    <script>
-    window.addEventListener('load', () => {
-      const bootSound = document.getElementById('bootSound');
-      
-      // 자동 재생 시도
-      const playPromise = bootSound.play();
+<script>
+  window.addEventListener('load', () => {
+    const bootSound = document.getElementById('bootSound');
 
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          console.log('부팅음 자동 재생 성공');
-          }).catch(() => {
-            // 자동 재생 제한 시, 클릭하면 한 번만 재생
-            document.body.addEventListener('click', function handler() {
-              bootSound.play();
-              document.body.removeEventListener('click', handler);
-            });
-          });
-        }
-      });
-      </script>
+    // 임시 muted 상태로 재생 → 브라우저 자동재생 허용 가능
+    bootSound.muted = true;
+    bootSound.play().then(() => {
+      // 재생 후 바로 음소거 해제
+      bootSound.muted = false;
+      console.log('부팅음 자동재생 성공');
+    }).catch((e) => {
+      console.log('자동재생 실패:', e);
+    });
+  });
+</script>
 </body>
 </html>
