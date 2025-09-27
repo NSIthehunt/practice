@@ -94,7 +94,7 @@
 
     // 로그인 성공 시 재생할 부팅음
     const bootSound = new Audio("boot.mp3");
-    bootSound.volume = 0.3;
+    bootSound.volume = 0.1;
 
     let failCount = 0;
 
@@ -102,36 +102,16 @@
       if (event.key === "Enter") {
         const password = passwordInput.value.trim();
         if (password === "861008") {
-          // 로그인 성공 시 부팅음 재생 후 1.5초 뒤 이동
+          // 로그인 성공: 입력칸과 메시지 숨기기
+          passwordInput.style.display = "none";
+          error.style.display = "none";
+          hint.style.display = "none";
+
+          // 부팅음 재생 후 1.8초 뒤 이동
           bootSound.play().then(() => {
             setTimeout(() => {
               window.location.href = "desktop.html";
             }, 1800);
           }).catch((e) => {
             console.log("자동 재생 실패, 바로 이동:", e);
-            window.location.href = "desktop.html"; // 실패 시 바로 이동
-          });
-        } else {
-          failCount++;
-          error.style.display = "block";
-
-          if (failCount >= 5) {
-            hint.textContent = "힌트: https://successful-range-83e.notion.site/15b58b3c3c9f8058a1c8d00568c93814";
-          } else {
-            hint.textContent = "힌트: 생년월일";
-          }
-          hint.style.display = "block";
-        }
-      }
-    });
-
-    passwordInput.addEventListener("focus", () => {
-      bg.style.filter = "blur(10px)";
-    });
-
-    passwordInput.addEventListener("blur", () => {
-      bg.style.filter = "blur(0px)";
-    });
-  </script>
-</body>
-</html>
+            window
