@@ -23,6 +23,11 @@
       text-shadow: 0 0 10px cyan, 0 0 20px cyan;
     }
 
+    /* ✅ 특정 문구만 나눔고딕 */
+    .nanum {
+      font-family: 'Nanum Gothic', sans-serif;
+    }
+    
     input {
       padding: 10px;
       margin: 10px;
@@ -67,7 +72,7 @@
 </head>
 <body>
   <h1>■ NSI Security System ■</h1>
-  <p>아이디와 비밀번호를 입력하세요.</p>
+  <p class="nanum">아이디와 비밀번호를 입력하세요.</p>
   
   <input type="text" id="username" placeholder="아이디">
   <input type="password" id="password" placeholder="비밀번호">
