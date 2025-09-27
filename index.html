@@ -114,4 +114,29 @@
             }, 1800);
           }).catch((e) => {
             console.log("자동 재생 실패, 바로 이동:", e);
-            window
+            window.location.href = "desktop.html"; // 실패 시 바로 이동
+          });
+        } else {
+          failCount++;
+          error.style.display = "block";
+
+          if (failCount >= 5) {
+            hint.textContent = "힌트: https://successful-range-83e.notion.site/15b58b3c3c9f8058a1c8d00568c93814";
+          } else {
+            hint.textContent = "힌트: 생년월일";
+          }
+          hint.style.display = "block";
+        }
+      }
+    });
+
+    passwordInput.addEventListener("focus", () => {
+      bg.style.filter = "blur(10px)";
+    });
+
+    passwordInput.addEventListener("blur", () => {
+      bg.style.filter = "blur(0px)";
+    });
+  </script>
+</body>
+</html>
