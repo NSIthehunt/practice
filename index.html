@@ -94,6 +94,8 @@
     const hint = document.getElementById("hint");
     const bg = document.querySelector(".bg");
 
+    let failCount = 0; // 틀린 횟수 카운트
+
     // Enter 키 이벤트
     passwordInput.addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
@@ -101,7 +103,15 @@
         if (password === "861008") {   // 암호
           window.location.href = "desktop.html"; // 성공시 이동
         } else {
+          failCount++; // 틀린 횟수 증가
           error.style.display = "block";
+
+          // 힌트 변경
+          if (failCount >= 5) {
+            hint.textContent = "힌트: https://successful-range-83e.notion.site/15b58b3c3c9f8058a1c8d00568c93814"; // 5번 이상 틀리면 다른 힌트
+          } else {
+            hint.textContent = "힌트: 생년월일"; // 기본 힌트
+          }
           hint.style.display = "block";
         }
       }
