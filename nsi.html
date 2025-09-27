@@ -75,39 +75,35 @@
 
   <p id="message" class="message"></p>
 
-  <script>
-  const usernameInput = document.getElementById("username");
-  const passwordInput = document.getElementById("password");
-  const message = document.getElementById("message");
+   <script>
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const error = document.getElementById("error");
 
-  // ✅ Web Audio API 기반 타자 소리
-  let audioCtx;
-  function playTypeSound() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // ✅ Web Audio API 기반 타자 소리
+    let audioCtx;
+    function playTypeSound() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = "square";         // 소리 파형
+      osc.frequency.value = 1200;  // 소리 높이
+      gain.gain.value = 0.02;      // 소리 크기
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05); // 0.05초 소리
     }
 
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    usernameInput.addEventListener("input", playTypeSound);
+    passwordInput.addEventListener("input", playTypeSound);
 
-    osc.type = "square";         
-    osc.frequency.value = 800;   // 조금 더 낮은 음
-    gain.gain.value = 0.05;      // 볼륨 키움
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.08); // 0.08초 유지
-
-    // 부드럽게 사라지도록
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-  }
-
-  usernameInput.addEventListener("input", playTypeSound);
-  passwordInput.addEventListener("input", playTypeSound);
-    
     // 로그인 함수
     function login() {
       const username = usernameInput.value.trim().toLowerCase();
