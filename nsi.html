@@ -83,7 +83,10 @@
     const passwordInput = document.getElementById("password");
     const message = document.getElementById("message");
     const typeSound = document.getElementById("typeSound");
-
+    
+    // 볼륨 40% 설정
+    typeSound.volume = 0.4;
+    
     function playTypeSound() {
       typeSound.currentTime = 0; // 처음부터 재생
       typeSound.play();
