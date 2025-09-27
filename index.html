@@ -128,21 +128,22 @@
     });
     
   </script>
-        <audio id="bootSound" src="boot.mp3" preload="auto"></audio>
+       <audio id="bootSound">
+  <source src="boot.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-  window.addEventListener('load', () => {
-    const bootSound = document.getElementById('bootSound');
+  const audio = document.getElementById('bootSound');
 
-    // 임시 muted 상태로 재생 → 브라우저 자동재생 허용 가능
-    bootSound.muted = true;
-    bootSound.play().then(() => {
-      // 재생 후 바로 음소거 해제
-      bootSound.muted = false;
-      console.log('부팅음 자동재생 성공');
-    }).catch((e) => {
-      console.log('자동재생 실패:', e);
-    });
+  // 자동 재생
+  window.addEventListener('load', async () => {
+    try {
+      await audio.play();
+      audio.volume = 0.1; // 볼륨 조절 가능
+      console.log("부팅음 자동 재생 성공");
+    } catch (e) {
+      console.log("자동 재생 차단됨. 클릭 시 재생 가능.");
+    }
   });
 </script>
 </body>
