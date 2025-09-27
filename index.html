@@ -2,20 +2,6 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Windows 11 Login Simulation</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      overflow: hidden;
-      background-color: black;
-    }
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
   <title>Login1 - Windows Style</title>
   <style>
     body {
@@ -25,10 +11,29 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      background: url("images/login-bg.jpg") no-repeat center center/cover;
+      background: black;
       font-family: 'Segoe UI', sans-serif;
-      color: white; /* ✅ 전체 글자 흰색 */
+      color: white;
+    }
+
+    /* 배경 전용 레이어 */
+    .bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url("images/login-bg.jpg") no-repeat center center/cover;
+      filter: blur(8px);   /* ✅ 배경만 블러 */
+      z-index: -1;         /* 로그인 박스보다 뒤 */
+    }
+
+    /* 로그인 박스 */
+    .login-box {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.4); /* 반투명 검정 배경 */
+      padding: 40px;
+      border-radius: 12px;
     }
 
     .user-icon {
@@ -74,12 +79,16 @@
   </style>
 </head>
 <body>
-  <img src="images/user-icon.png" alt="User Icon" class="user-icon">
-  <div class="username">DORI</div>
+  <div class="bg"></div> <!-- 배경 -->
 
-  <input type="password" id="password" placeholder="암호 입력">
-  <p id="error" class="error">암호가 올바르지 않습니다.</p>
-  <p id="hint" class="hint">힌트: 생년월일</p>
+  <div class="login-box">
+    <img src="images/user-icon.png" alt="User Icon" class="user-icon">
+    <div class="username">DORI</div>
+
+    <input type="password" id="password" placeholder="암호 입력">
+    <p id="error" class="error">암호가 올바르지 않습니다.</p>
+    <p id="hint" class="hint">힌트: 생년월일</p>
+  </div>
 
   <script>
     const passwordInput = document.getElementById("password");
@@ -89,7 +98,7 @@
     passwordInput.addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
         const password = passwordInput.value.trim();
-        if (password === "950906") {   // ✅ 암호 변경
+        if (password === "950906") {   // ✅ 암호
           window.location.href = "desktop.html"; // 성공시 desktop.html로 이동
         } else {
           error.style.display = "block";
@@ -100,6 +109,3 @@
   </script>
 </body>
 </html>
-
-
-   
