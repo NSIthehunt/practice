@@ -75,30 +75,18 @@
 
   <p id="message" class="message"></p>
 
-   <script>
+  <!-- ✅ 전자음 효과 -->
+  <audio id="typeSound" src="type.mp3" preload="auto"></audio>
+
+  <script>
     const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
-    const error = document.getElementById("error");
+    const message = document.getElementById("message");
+    const typeSound = document.getElementById("typeSound");
 
-    // ✅ Web Audio API 기반 타자 소리
-    let audioCtx;
     function playTypeSound() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = "square";         // 소리 파형
-      osc.frequency.value = 1200;  // 소리 높이
-      gain.gain.value = 0.02;      // 소리 크기
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05); // 0.05초 소리
+      typeSound.currentTime = 0; // 처음부터 재생
+      typeSound.play();
     }
 
     usernameInput.addEventListener("input", playTypeSound);
@@ -118,7 +106,7 @@
         // 로그인 성공
         message.textContent = "승인!";
         message.className = "message success";
-        http://message.style.display = "block";
+        message.style.display = "block";
 
         // 1초 후 페이지 이동
         setTimeout(() => {
@@ -128,7 +116,7 @@
         // 로그인 실패
         message.textContent = "경고: 아이디 또는 비밀번호 불일치";
         message.className = "message error";
-        http://message.style.display = "block";
+        message.style.display = "block";
       }
     }
   </script>
