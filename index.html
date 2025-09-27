@@ -5,6 +5,7 @@
   <title>window login - Windows Style</title>
   <style>
     body {
+      
       margin: 0;
       padding: 0;
       height: 100vh;
@@ -125,6 +126,30 @@
     passwordInput.addEventListener("blur", () => {
       bg.style.filter = "blur(0px)";
     });
+    
   </script>
+        <!-- 부팅음 추가 -->
+    <audio id="bootSound" src="boot.mp3" preload="auto"></audio>
+
+    <script>
+    window.addEventListener('load', () => {
+      const bootSound = document.getElementById('bootSound');
+      
+      // 자동 재생 시도
+      const playPromise = bootSound.play();
+
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          console.log('부팅음 자동 재생 성공');
+          }).catch(() => {
+            // 자동 재생 제한 시, 클릭하면 한 번만 재생
+            document.body.addEventListener('click', function handler() {
+              bootSound.play();
+              document.body.removeEventListener('click', handler);
+            });
+          });
+        }
+      });
+      </script>
 </body>
 </html>
