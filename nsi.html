@@ -2,107 +2,135 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>window login - Windows Style</title>
+  <title>NSI Security System</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;   /* 가로 중앙 */
-      align-items: flex-start;   /* 세로 상단으로 정렬 */
-      background: black;
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-    }
-
-    /* 배경 전용 레이어 */
-    .bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: url("login_bg.png") no-repeat center center/cover;
-      filter: blur(8px);   /* 배경 블러 */
-      z-index: -1;         /* 로그인 박스보다 뒤 */
-    }
-
-    /* 로그인 박스 */
-    .login-box {
-      text-align: center;
-      position: relative;
-      z-index: 1;
-      padding: 40px;
-      margin-top: 350px; /* 화면 상단에서 띄우기 */
+      background-color: black;
+      color: cyan;
+      font-family: 'Courier New', monospace;
       display: flex;
       flex-direction: column;
-      align-items: center; /* 내부 요소 중앙 정렬 */
-      gap: 15px; /* 요소 간 간격 */
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
     }
 
-    .user-icon {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-    }
-
-    .username {
-      font-size: 1.5em;
-      color: white;
+    h1 {
+      font-size: 2.5em;
+      text-shadow: 0 0 10px cyan, 0 0 20px cyan;
     }
 
     input {
       padding: 10px;
-      border: none; /* 테두리 제거 */
-      outline: none;
-      font-size: 0.9em;
+      margin: 10px;
+      border: 2px solid cyan;
+      background: black;
+      color: cyan;
+      font-size: 1em;
+      text-align: center;
+      display: block;
       width: 250px;
-      text-align: left;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border-radius: 1px;
     }
 
-    input::placeholder {
-      color: white;
-      opacity: 0.7;
+    button {
+      padding: 10px 20px;
+      border: 2px solid cyan;
+      background: black;
+      color: cyan;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 10px;
     }
 
-    .error, .hint {
-      color: white;
-      margin-top: 5px;
+    button:hover {
+      background: cyan;
+      color: black;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-weight: bold;
       display: none;
-      font-size: 0.9em;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: lime; /* 초록색 */
     }
   </style>
 </head>
 <body>
-  <div class="bg"></div> <!-- 배경 -->
+  <h1>■ NSI Security System ■</h1>
+  <p>아이디와 비밀번호를 입력하세요.</p>
+  
+  <input type="text" id="username" placeholder="아이디">
+  <input type="password" id="password" placeholder="비밀번호">
+  <button onclick="login()">접속</button>
 
-  <div class="login-box">
-    <img src="user-icon.png" alt="User Icon" class="user-icon">
-    <div class="username">TAESU</div>
-
-    <input type="password" id="password" placeholder="FIN">
-    <p id="error" class="error">암호가 올바르지 않습니다.</p>
-    <p id="hint" class="hint">힌트: 생년월일</p>
-  </div>
+  <p id="message" class="message"></p>
 
   <script>
+    const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
-    const error = document.getElementById("error");
-    const hint = document.getElementById("hint");
+    const message = document.getElementById("message");
 
-    passwordInput.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        const password = passwordInput.value.trim();
-        if (password === "950906") {   // 암호
-          window.location.href = "desktop.html"; // 성공시 이동
-        } else {
-          http://error.style.display = "block";
-          http://hint.style.display = "block";
-        }
+    // ✅ Web Audio API 기반 타자 소리
+    let audioCtx;
+    function playTypeSound() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
-    });
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = "square";         
+      osc.frequency.value = 1200;  
+      gain.gain.value = 0.02;      
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+
+    usernameInput.addEventListener("input", playTypeSound);
+    passwordInput.addEventListener("input", playTypeSound);
+
+    // 로그인 함수
+    function login() {
+      const username = usernameInput.value.trim().toLowerCase();
+      const password = passwordInput.value.trim();
+
+      const accounts = {
+        "god2dog@korea.kr": { password: "25690", page: "sin.html" },
+        "4bigs@korea.kr": { password: "2410080142", page: "sa.html" }
+      };
+
+      if (accounts[username] && accounts[username].password === password) {
+        // 로그인 성공
+        message.textContent = "승인!";
+        message.className = "message success";
+        http://message.style.display = "block";
+
+        // 1초 후 페이지 이동
+        setTimeout(() => {
+          window.location.href = accounts[username].page;
+        }, 1000);
+      } else {
+        // 로그인 실패
+        message.textContent = "경고: 아이디 또는 비밀번호 불일치";
+        message.className = "message error";
+        http://message.style.display = "block";
+      }
+    }
   </script>
 </body>
 </html>
