@@ -11,17 +11,20 @@
       background: url("desktop.png") no-repeat center center/cover;
       font-family: 'Segoe UI', sans-serif;
       position: relative;
+      overflow: hidden;
     }
 
     /* 아이콘 래퍼 */
     .icon-wrapper {
       position: absolute;
-      top: 50px;
-      left: 50px;
       width: 80px;
       text-align: center;
-      cursor: pointer;
+      cursor: grab;
       user-select: none;
+    }
+
+    .icon-wrapper:active {
+      cursor: grabbing;
     }
 
     /* hover 시 배경 박스 */
@@ -32,11 +35,11 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.2); /* 반투명 박스 */
+      background: rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       opacity: 0;
       transition: opacity 0.2s ease;
-      z-index: -1; /* 아이콘과 글자 뒤 */
+      z-index: -1;
     }
 
     .icon-wrapper:hover::before {
@@ -44,7 +47,7 @@
     }
 
     .icon {
-      position: relative; /* z-index 설정용 */
+      position: relative;
       color: white;
       width: 80px;
     }
@@ -65,17 +68,68 @@
   </style>
 </head>
 <body>
-  <div class="icon-wrapper" ondblclick="openApp()">
+  <!-- NSI 아이콘 -->
+  <div class="icon-wrapper" style="top:50px; left:50px;" ondblclick="openNSI()">
     <div class="icon">
-      <img src="appicon2.png" alt="앱 아이콘">
+      <img src="appicon2.png" alt="NSI 아이콘">
       <span>NSI</span>
     </div>
   </div>
 
+  <!-- Chrome 아이콘 -->
+  <div class="icon-wrapper" style="top:50px; left:150px;" ondblclick="openChrome()">
+    <div class="icon">
+      <img src="chromeicon.png" alt="Chrome 아이콘">
+      <span>Chrome</span>
+    </div>
+  </div>
+
   <script>
-    function openApp() {
-      window.location.href = "./nsi.html"; 
+    function openNSI() {
+      window.location.href = "./nsi.html";
     }
+
+    function openChrome() {
+      window.open(
+        "https://www.google.com",
+        "_blank",
+        "width=1024,height=768,resizable=yes,scrollbars=yes"
+      );
+    }
+
+    // 드래그 기능
+    const icons = document.querySelectorAll('.icon-wrapper');
+    icons.forEach(icon => {
+      let offsetX = 0, offsetY = 0, isDragging = false;
+
+      icon.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - icon.offsetLeft;
+        offsetY = e.clientY - icon.offsetTop;
+        icon.style.zIndex = 1000; // 드래그 시 최상위로
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          let x = e.clientX - offsetX;
+          let y = e.clientY - offsetY;
+
+          // 화면 밖으로 나가지 않게 제한
+          x = Math.max(0, Math.min(window.innerWidth - icon.offsetWidth, x));
+          y = Math.max(0, Math.min(window.innerHeight - icon.offsetHeight, y));
+
+          icon.style.left = x + 'px';
+          icon.style.top = y + 'px';
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          icon.style.zIndex = 1;
+        }
+      });
+    });
   </script>
 </body>
 </html>
