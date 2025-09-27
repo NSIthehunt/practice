@@ -1,136 +1,61 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>NSI Security System</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      color: cyan;
-      font-family: 'Courier New', monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
+<script>
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const message = document.getElementById("message");
+
+  // ✅ Web Audio API 기반 타자 소리
+  let audioCtx;
+  function playTypeSound() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
 
-    h1 {
-      font-size: 2.5em;
-      text-shadow: 0 0 10px cyan, 0 0 20px cyan;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = "square";         
+    osc.frequency.value = 800;   // 조금 더 낮은 음
+    gain.gain.value = 0.05;      // 볼륨 키움
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.08); // 0.08초 유지
+
+    // 부드럽게 사라지도록
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+  }
+
+  usernameInput.addEventListener("input", playTypeSound);
+  passwordInput.addEventListener("input", playTypeSound);
+
+  // 로그인 함수
+  function login() {
+    const username = usernameInput.value.trim().toLowerCase();
+    const password = passwordInput.value.trim();
+
+    const accounts = {
+      "god2dog@korea.kr": { password: "25690", page: "sin.html" },
+      "4bigs@korea.kr": { password: "2410080142", page: "sa.html" }
+    };
+
+    if (accounts[username] && accounts[username].password === password) {
+      // 로그인 성공
+      message.textContent = "승인!";
+      message.className = "message success";
+      message.style.display = "block";
+
+      // 1초 후 페이지 이동
+      setTimeout(() => {
+        window.location.href = accounts[username].page;
+      }, 1000);
+    } else {
+      // 로그인 실패
+      message.textContent = "경고: 아이디 또는 비밀번호 불일치";
+      message.className = "message error";
+      message.style.display = "block";
     }
-
-    input {
-      padding: 10px;
-      margin: 10px;
-      border: 2px solid cyan;
-      background: black;
-      color: cyan;
-      font-size: 1em;
-      text-align: center;
-      display: block;
-      width: 250px;
-    }
-
-    button {
-      padding: 10px 20px;
-      border: 2px solid cyan;
-      background: black;
-      color: cyan;
-      font-size: 1em;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: cyan;
-      color: black;
-    }
-
-    .message {
-      margin-top: 10px;
-      font-weight: bold;
-      display: none;
-    }
-
-    .error {
-      color: red;
-    }
-
-    .success {
-      color: lime; /* 초록색 */
-    }
-  </style>
-</head>
-<body>
-  <h1>■ NSI Security System ■</h1>
-  <p>아이디와 비밀번호를 입력하세요.</p>
-  
-  <input type="text" id="username" placeholder="아이디">
-  <input type="password" id="password" placeholder="비밀번호">
-  <button onclick="login()">접속</button>
-
-  <p id="message" class="message"></p>
-
-  <script>
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const message = document.getElementById("message");
-
-    // ✅ Web Audio API 기반 타자 소리
-    let audioCtx;
-    function playTypeSound() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = "square";         
-      osc.frequency.value = 1200;  
-      gain.gain.value = 0.02;      
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
-    }
-
-    usernameInput.addEventListener("input", playTypeSound);
-    passwordInput.addEventListener("input", playTypeSound);
-
-    // 로그인 함수
-    function login() {
-      const username = usernameInput.value.trim().toLowerCase();
-      const password = passwordInput.value.trim();
-
-      const accounts = {
-        "god2dog@korea.kr": { password: "25690", page: "sin.html" },
-        "4bigs@korea.kr": { password: "2410080142", page: "sa.html" }
-      };
-
-      if (accounts[username] && accounts[username].password === password) {
-        // 로그인 성공
-        message.textContent = "승인!";
-        message.className = "message success";
-        http://message.style.display = "block";
-
-        // 1초 후 페이지 이동
-        setTimeout(() => {
-          window.location.href = accounts[username].page;
-        }, 1000);
-      } else {
-        // 로그인 실패
-        message.textContent = "경고: 아이디 또는 비밀번호 불일치";
-        message.className = "message error";
-        http://message.style.display = "block";
-      }
-    }
-  </script>
-</body>
-</html>
+  }
+</script>
