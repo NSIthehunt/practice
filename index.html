@@ -22,8 +22,8 @@
       top: 0; left: 0;
       width: 100%; height: 100%;
       background: url("login-bg.jpg") no-repeat center center/cover;
-      filter: blur(8px);   /* ✅ 배경만 블러 */
-      z-index: -1;         /* 로그인 박스보다 뒤 */
+      filter: blur(8px);
+      z-index: -1;
     }
 
     /* 로그인 박스 */
@@ -31,7 +31,7 @@
       text-align: center;
       position: relative;
       z-index: 1;
-      background: rgba(0, 0, 0, 0.4); /* 반투명 검정 배경 */
+      background: rgba(0, 0, 0, 0.4);
       padding: 40px;
       border-radius: 12px;
     }
@@ -49,24 +49,56 @@
       color: white;
     }
 
+    .password-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
     input {
+      flex: 1;
       padding: 10px;
-      border: none;
+      border: 2px solid white;
       outline: none;
       font-size: 1em;
-      width: 250px;
       text-align: center;
       background: rgba(0, 0, 0, 0.5);
-      color: white; /* ✅ 입력 글자 흰색 */
+      color: white;
+      border-radius: 6px 0 0 6px;
+      transition: all 0.1s ease;
     }
 
     input::placeholder {
-      color: white; /* ✅ placeholder 흰색 */
+      color: white;
       opacity: 0.7;
     }
 
+    #loginBtn {
+      padding: 0 15px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px solid white;
+      cursor: pointer;
+      font-size: 1.2em;
+      color: white;
+      border-radius: 0 6px 6px 0;
+      height: 42px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.1s ease;
+    }
+
+    #loginBtn:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    #loginBtn.active {
+      transform: scale(0.95);
+    }
+
     .error {
-      color: red;
+      color: blue;
       margin-top: 10px;
       display: none;
     }
@@ -79,32 +111,54 @@
   </style>
 </head>
 <body>
-  <div class="bg"></div> <!-- 배경 -->
+  <div class="bg"></div>
 
   <div class="login-box">
     <img src="user-icon.png" alt="User Icon" class="user-icon">
     <div class="username">DORI</div>
 
-    <input type="password" id="password" placeholder="암호 입력">
+    <div class="password-container">
+      <input type="password" id="password" placeholder="암호 입력">
+      <button id="loginBtn">→</button>
+    </div>
+
     <p id="error" class="error">암호가 올바르지 않습니다.</p>
     <p id="hint" class="hint">힌트: 생년월일</p>
   </div>
 
   <script>
     const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
     const error = document.getElementById("error");
     const hint = document.getElementById("hint");
 
+    function checkPassword() {
+      const password = passwordInput.value.trim();
+      if (password === "950906") {
+        window.location.href = "desktop.html";
+      } else {
+        error.style.display = "block";
+        hint.style.display = "block";
+      }
+    }
+
+    function animateButton() {
+      loginBtn.classList.add("active");
+      setTimeout(() => {
+        loginBtn.classList.remove("active");
+      }, 100); // 0.1초 동안 눌린 효과
+    }
+
     passwordInput.addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
-        const password = passwordInput.value.trim();
-        if (password === "950906") {   // ✅ 암호
-          window.location.href = "desktop.html"; // 성공시 desktop.html로 이동
-        } else {
-          error.style.display = "block";
-          hint.style.display = "block";
-        }
+        animateButton(); // 엔터 눌러도 버튼 눌림 애니메이션
+        checkPassword();
       }
+    });
+
+    loginBtn.addEventListener("click", () => {
+      animateButton();
+      checkPassword();
     });
   </script>
 </body>
