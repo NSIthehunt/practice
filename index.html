@@ -65,7 +65,6 @@
       color: white;
       border-radius: 6px 0 0 6px;
       transition: all 0.1s ease;
-      height: 42px; /* 높이 고정 */
     }
 
     input::placeholder {
@@ -74,7 +73,7 @@
     }
 
     #loginBtn {
-      width: 50px; /* 버튼 너비 */
+      width: 50px; 
       background: rgba(255, 255, 255, 0.3);
       border: 2px solid white; /* 흰색 실선 테두리 */
       cursor: pointer;
@@ -86,7 +85,7 @@
       justify-content: center;
       align-items: center;
       transition: all 0.1s ease;
-      height: 42px; /* 입력칸 높이와 동일 */
+      height: 100%; /* 입력칸 높이에 맞춤 */
     }
 
     #loginBtn:hover {
@@ -147,4 +146,17 @@
       setTimeout(() => loginBtn.classList.remove("active"), 100);
     }
 
-    passwordInput.addEventListener("keydo
+    passwordInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        animateButton(); // 엔터 눌러도 버튼 눌림 애니메이션
+        checkPassword();
+      }
+    });
+
+    loginBtn.addEventListener("click", () => {
+      animateButton();
+      checkPassword();
+    });
+  </script>
+</body>
+</html>
