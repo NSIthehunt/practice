@@ -20,6 +20,7 @@
       cursor: pointer;
       color: white;
       width: 80px;
+      user-select: none; /* 텍스트 드래그 방지 */
     }
     .icon img {
       width: 60px;
@@ -36,14 +37,14 @@
   </style>
 </head>
 <body>
-  <div class="icon" onclick="openApp()">
+  <div class="icon" ondblclick="openApp()">
     <img src="appicon2.png" alt="앱 아이콘">
     <span>NSI</span>
   </div>
 
   <script>
     function openApp() {
-      // 현재 HTML 파일과 동일한 폴더 안에 nsi.html이 있는지 확인
+      // 더블 클릭 시 nsi.html 열기
       window.location.href = "./nsi.html"; 
     }
   </script>
